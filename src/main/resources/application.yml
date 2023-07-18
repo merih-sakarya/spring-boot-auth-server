@@ -1,0 +1,43 @@
+# Server configuration
+server:
+  port: ${AUTH_SERVER_PORT:5500}
+
+# Information about the build
+info:
+  build:
+    name: @project.name@
+    description: @project.description@
+    group: @project.groupId@
+    artifact: @project.artifactId@
+    version: @project.version@
+
+# Default logging configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+    org.springframework.boot.autoconfigure: INFO
+
+# Actuator management configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'info,health'
+
+# Configuration specific to OAuth 2.0 Authorization Server
+authorization-server:
+  client:
+    # Configuration for the web-client
+    web-client:
+      client-id: "${AUTH_SERVER_WEB_CLIENT_ID:web-client-id}"
+      client-secret: "${AUTH_SERVER_WEB_CLIENT_SECRET:web-client-secret}"
+      redirectUri: "${AUTH_SERVER_WEB_CLIENT_REDIRECT_URI:http://127.0.0.1:4200/login/oauth2/code/web-client-oidc}"
+      postLogoutRedirectUri: "${AUTH_SERVER_WEB_CLIENT_LOGOUT_REDIRECT_URI:http://127.0.0.1:4200/logged-out}"
+
+    # Configuration for the core-client
+    core-client:
+      client-id: "${AUTH_SERVER_CORE_CLIENT_ID:core-client-id}"
+      client-secret: "${AUTH_SERVER_CORE_CLIENT_SECRET:core-client-secret}"
