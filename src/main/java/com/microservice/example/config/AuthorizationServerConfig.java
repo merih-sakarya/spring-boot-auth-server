@@ -7,8 +7,8 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-import com.microservice.example.properties.CoreClientProperties;
-import com.microservice.example.properties.WebClientProperties;
+import com.microservice.example.config.properties.CoreClientProperties;
+import com.microservice.example.config.properties.WebClientProperties;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
