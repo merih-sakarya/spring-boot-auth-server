@@ -29,16 +29,48 @@ This will compile the project, run tests, and package it as a JAR file.
 
 ### Running the project
 
+This application can be run with various profiles to adapt to different environments and authentication methods. The available profiles are:
+
+- **Environment Profiles**: These profiles control the general behavior and configuration of the application for different environments.
+    - `local`, `test`, `prod`: Define the environment in which the application is running. These profiles configure settings such as the port number, logging levels, and more.
+
+- **Authentication Profiles**: These profiles determine the authentication method used by the application.
+    - `IN-MEMORY`, `LDAP`: Define the authentication method used by the application. These profiles configure settings such as the authentication server's URL, client ID, client secret, and more.
+
 To run the project, execute the following command from the project root directory:
 ```bash
-java -jar target/auth-server-0.0.1-SNAPSHOT.jar
+java -jar target/auth-server-0.0.1-SNAPSHOT.jar --spring.profiles.active={environment_profile},{authentication_profile}
 ```
 
-`auth-server` will start and register itself with the Discovery Server and be ready to handle authentication and authorization requests.
+Upon execution, the `auth-server` will start and be ready to handle authentication and authorization requests.
 
 ## Configuration
 
 The project uses the `application.yml` file for its configuration settings, allowing for easy management and updates of the application's configuration.
+
+
+## Authentication Options
+
+### In-Memory Authentication
+The In-Memory authentication profile is convenient for local testing and development. Users are pre-defined within the application, and it does not require any external authentication server:
+
+- Username: `user`, Password: `user-password`, Roles: `USER`
+- Username: `admin`, Password: `admin-password`, Roles: `ADMIN`
+- To activate this profile, run with the following parameters:
+```bash
+--spring.profiles.active={environment_profile},IN-MEMORY
+```
+
+### LDAP Authentication
+The LDAP authentication profile provides a way to authenticate users against an LDAP server, suitable for local testing and development with real-world-like scenarios. The "test-server.ldif" file includes the configuration and sample users for a test LDAP server:
+
+- Username: `ldap-user`, Password: `ldap-user-password`
+- To activate this profile, run with the following parameters:
+```bash 
+--spring.profiles.active={environment_profile},LDAP
+```
+
+For local testing, ensure you have the "test-server.ldif" file correctly set up. It contains the definitions for the test users and their corresponding passwords.
 
 ## OAuth2
 
@@ -46,7 +78,7 @@ The project uses the `application.yml` file for its configuration settings, allo
 
 Proof Key for Code Exchange (PKCE) is an OAuth 2.0 extension designed to enhance security for the authorization process in public clients, preventing the interception of authorization codes by malicious entities. It finds particular value in Single Page Applications (SPAs) and mobile applications.
 
-To employ PKCE, the client must generate a unique **code_verifier** and a corresponding** code_challenge** for every authorization request. This generation is a part of the Authorization Code flow.
+To employ PKCE, the client must generate a unique **code_verifier** and a corresponding **code_challenge** for every authorization request. This generation is a part of the Authorization Code flow.
 
 Here are some example values:
 
@@ -78,7 +110,7 @@ Include these parameters when directing the user to the authorization URL and wh
     http://127.0.0.1:5500/oauth2/authorize?response_type=code&client_id=web-client&scope=openid&redirect_uri=http://127.0.0.1:4200/login/oauth2/code/web-client-oidc&code_challenge={code_challenge}&code_challenge_method={code_challenge_method}&continue
     ```
 
-4.  **Authorization Code URL:** Post user's consent, they are redirected to this URL equipped with a one-time authorization code.
+4.  **Authorization Code URL:** Post user's consent, they are redirected to this URL equipped with a one-time authorization code. This URL will typically correspond to a route within your application, such as a Single Page Application (SPA), where you handle the authorization code.
 
     ```url
     http://127.0.0.1:4200/login/oauth2/code/web-client-oidc?code={ONE-TIME-CODE}

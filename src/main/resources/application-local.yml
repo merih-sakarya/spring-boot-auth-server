@@ -1,3 +1,6 @@
+# Local development configuration.
+# Use in combination with Authentication profiles: IN-MEMORY, LDAP, JDBC.
+
 # Logging configuration
 logging:
   level:
@@ -6,3 +9,12 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG
     org.springframework.boot.autoconfigure: INFO
+
+# Spring configurations
+spring:
+  # LDAP configuration
+  ldap:
+    embedded:
+      ldif: classpath:test-server.ldif
+      base-dn: dc=springframework,dc=org
+      port: 8389
